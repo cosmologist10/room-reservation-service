@@ -8,7 +8,7 @@ import { requestId, notFound, errorHandler } from '../../middleware/errorHandler
  * Creates the Express app without starting the server or the cron job.
  * Used by all route tests via supertest.
  */
-export function createApp() {
+export function createApp(): express.Express {
   const app = express();
   app.use(express.json());
   app.use(requestId);
