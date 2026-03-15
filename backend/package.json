@@ -6,7 +6,10 @@
     "start": "node dist/index.js",
     "build": "tsc -p tsconfig.build.json",
     "dev": "nodemon --exec ts-node src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
   },
   "keywords": [],
   "author": "sumanshweta44@gmail.com",
@@ -14,10 +17,15 @@
   "description": "Room reservation service backend",
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/pg": "^8.18.0",
+    "drizzle-kit": "^0.31.9",
     "typescript": "^5.9.3"
   },
   "packageManager": "pnpm@10.18.1+sha512.77a884a165cbba2d8d1c19e3b4880eee6d2fcabd0d879121e282196b80042351d5eb3ca0935fa599da1dc51265cc68816ad2bddd2a2de5ea9fdf92adbec7cd34",
   "dependencies": {
-    "express": "^5.2.1"
+    "dotenv": "^17.3.1",
+    "drizzle-orm": "^0.45.1",
+    "express": "^5.2.1",
+    "pg": "^8.20.0"
   }
 }
