@@ -72,6 +72,12 @@ pnpm dev
 
 Frontend runs on http://localhost:5173.
 
+### 6. Run tests
+
+```sh
+pnpm test
+```
+
 ---
 
 ## OTP (development mode)
