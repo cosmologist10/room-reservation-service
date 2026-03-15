@@ -17,8 +17,10 @@
   "license": "ISC",
   "description": "Room reservation service backend",
   "devDependencies": {
+    "@types/bcryptjs": "^3.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.5.0",
     "@types/pg": "^8.18.0",
     "@types/supertest": "^7.2.0",
@@ -30,11 +32,13 @@
   },
   "packageManager": "pnpm@10.18.1+sha512.77a884a165cbba2d8d1c19e3b4880eee6d2fcabd0d879121e282196b80042351d5eb3ca0935fa599da1dc51265cc68816ad2bddd2a2de5ea9fdf92adbec7cd34",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "drizzle-orm": "^0.45.1",
     "express": "^5.2.1",
     "express-rate-limit": "^8.3.1",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.20.0"
   }
 }

@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit';
 import roomRoutes from './routes/rooms';
 import bookingRoutes from './routes/booking';
 import webhookRoutes from './routes/webhook';
+import staffRoutes from './routes/staff';
 import { requestId, notFound, errorHandler } from './middleware/errorHandler';
 import { startPaymentProcessorCron } from './jobs/paymentProcessor';
 
@@ -29,6 +30,7 @@ app.use(express.json());
 app.use('/api/rooms', roomRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/webhooks', webhookRoutes);
+app.use('/api/staff', staffRoutes);
 
 app.get('/', (_req, res) => {
   res.send('Welcome to the Hotel Booking API. Yes, it works. No, you cannot check in here.');

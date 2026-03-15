@@ -1,4 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 import {
   createBooking,
   getBookingsByEmail,
@@ -9,6 +10,12 @@ import {
 import { requestOtp, verifyOtp, InvalidOtpError } from '../services/otp';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const JWT_SECRET = process.env.JWT_SECRET ?? 'dev-jwt-secret';
+
+function isStaffToken(authHeader: string | undefined): boolean {
+  if (!authHeader?.startsWith('Bearer ')) return false;
+  try { jwt.verify(authHeader.slice(7), JWT_SECRET); return true; } catch { return false; }
+}
 
 const router: Router = Router();
 
@@ -34,11 +41,12 @@ router.post('/otp', async (req: Request, res: Response, next: NextFunction) => {
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   const idempotencyKey = req.headers['idempotency-key'] as string;
   const otp = req.headers['x-otp'] as string | undefined;
+  const isStaff = isStaffToken(req.headers.authorization);
 
   if (!idempotencyKey) {
     return res.status(422).json({ error: 'Idempotency-Key header is required' });
   }
-  if (!otp) {
+  if (!isStaff && !otp) {
     return res.status(422).json({ error: 'X-OTP header is required' });
   }
 
@@ -68,13 +76,15 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     return res.status(422).json({ error: 'check_out must be after check_in' });
   }
 
-  // Verify and consume OTP — confirms the customer owns the email before booking
-  try {
-    await verifyOtp(customer.email, otp, true);
-  } catch (err) {
-    if (err instanceof InvalidOtpError) return res.status(401).json({ error: 'Invalid or expired OTP' });
-    next(err);
-    return;
+  // Verify and consume OTP for customer bookings — staff skip this as they are authenticated via JWT
+  if (!isStaff) {
+    try {
+      await verifyOtp(customer.email, otp!, true);
+    } catch (err) {
+      if (err instanceof InvalidOtpError) return res.status(401).json({ error: 'Invalid or expired OTP' });
+      next(err);
+      return;
+    }
   }
 
   try {
