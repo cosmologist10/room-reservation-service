@@ -1,4 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
+import { randomUUID } from 'crypto';
+
+export function requestId(req: Request, res: Response, next: NextFunction) {
+  const id = (req.headers['x-request-id'] as string) ?? randomUUID();
+  (req as any).id = id;
+  res.setHeader('X-Request-Id', id);
+  next();
+}
+
+export function notFound(req: Request, res: Response) {
+  res.status(404).json({
+    error: `Route ${req.method} ${req.path} not found`,
+    requestId: (req as any).id,
+  });
+}
+
 
 
 /**
